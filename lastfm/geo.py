@@ -248,10 +248,13 @@ class Location(LastfmBase):
                                            latitude = self.latitude,
                                            longitude = self.longitude)
         else:
-            return self.__class__._hash_func(name = self.city)
+            return self.__class__._hash_func(name = self.city, country = self.country)
 
     def __eq__(self, other):
-        return self.latitude == other.latitude and self.longitude == other.longitude
+        if self.latitude is not None and self.longitude is not None:
+            return self.latitude == other.latitude and self.longitude == other.longitude
+        else:
+            return self.city == other.city and self.country == other.country
 
     def __lt__(self, other):
         if self.country != other.country:

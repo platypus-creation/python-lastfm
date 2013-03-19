@@ -320,12 +320,22 @@ class Artist(LastfmBase):
         self._url = data.findtext('url')
         self._image = dict([(i.get('size'), i.text) for i in data.findall('image')])
         self._streamable = (data.findtext('streamable') == 1)
+        
         if not self._stats:
-            self._stats = Stats(
-                             subject = self,
-                             listeners = int(data.findtext('stats/listeners')),
-                             playcount = int(data.findtext('stats/playcount'))
-                             )
+            listeners = 0
+            try:
+                listeners = int(data.findtext('stats/listeners'))
+            except ValueError:
+                pass
+        
+            playcount = 0
+            try:
+                playcount = int(data.findtext('stats/playcount'))
+            except ValueError:
+                playcount = 0
+
+            self._stats = Stats(subject = self, listeners = listeners, playcount = playcount)
+            
 #        self._similar = [
 #                          Artist(
 #                                 self._api,
