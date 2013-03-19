@@ -234,9 +234,9 @@ class Location(LastfmBase):
         
     @staticmethod
     def _hash_func(*args, **kwds):
-        try:
+        if 'latitude' in kwds and kwds['latitude'] is not None and 'longitude' in kwds and kwds['longitude'] is not None:
             return hash("latlong%s%s" % (kwds['latitude'], kwds['longitude']))
-        except KeyError:
+        else:
             try:
                 return hash("name%s" % kwds['city'])
             except KeyError:
